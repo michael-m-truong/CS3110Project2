@@ -7,6 +7,10 @@ public class CalculatorPt2 {
 
     static LinkedList<Double> numbers = new LinkedList<Double>();
     static LinkedList<Character> operands = new LinkedList<Character>();
+
+    static Stack<Double> num_stack = new Stack<Double>();
+    static Stack<Character> op_stack = new Stack<Character>();
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter input string to convert to decimal: ");
@@ -18,7 +22,9 @@ public class CalculatorPt2 {
         if (inputValidation(inputStr)) {
             System.out.println(findOperands(inputStr));
             System.out.println(findNums(inputStr));
-            System.out.println(solve(operands, numbers, 0, operands.size()));
+            System.out.println(num_stack);
+            System.out.println(op_stack);
+            //System.out.println(solve(operands, numbers, 0, operands.size()));
             //double paranthesis_operands = sort_PEMDAS();
             //System.out.println("Answer: " + calculate(paranthesis_operands));
         }
@@ -352,6 +358,83 @@ public class CalculatorPt2 {
         operands.set(index0, ele1);
         operands.set(index1, ele0);
     }
+
+    private static void ifStackEmpty_Push(Character op) {
+        
+
+            System.out.println(num_stack + "not em");
+            System.out.println(op_stack);
+            while (!op_stack.isEmpty() && precedence(op) <= precedence(op_stack.peek())) {
+                System.out.println("processing");
+                process();
+            }
+            //if (precedence(op) >= precedence(op_stack.peek())) {
+                //process();
+                op_stack.push(op);
+            //} 
+            
+
+        /* 
+        if (op_stack.empty())
+            op_stack.push(op);
+        else {
+            System.out.println(num_stack + "not em");
+            System.out.println(op_stack);
+            while (precedence(op) < precedence(op_stack.peek())) {
+                System.out.println("processing");
+                process();
+            }
+            if (precedence(op) >= precedence(op_stack.peek())) {
+                //process();
+                op_stack.push(op);
+            }
+            
+        }
+        */
+    }
+
+    private static void process() {
+        System.out.println(num_stack + "proc");
+        System.out.println(op_stack);
+        System.out.println(op_stack.peek() + "top");
+        double b = num_stack.pop();
+        double a = num_stack.pop();
+        //double b = num_stack.pop();
+        char operation = op_stack.pop();
+        switch (operation) {
+            case '+':
+                num_stack.push(a+b);
+                break;
+            case '-':
+                num_stack.push(a-b);
+                break;
+            case '*':
+                num_stack.push(a*b);
+                break;
+            case '/':
+                if (a == 0)
+                    throw new
+                            UnsupportedOperationException("Cannot divide by zero");
+                num_stack.push(a/b);
+        }
+    }
+
+
+
+    private static int precedence(char op) {
+        switch (op){
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            case '^':
+                return 3;
+        }
+        return -1;
+
+    }
     
     private static LinkedList findNums(String str) {
         //LinkedList<Double> numbers = new LinkedList<Double>();
@@ -363,44 +446,74 @@ public class CalculatorPt2 {
         //newNum+=num
         //need to do pendas
         for (int i = 0; i < str.length(); i++) {
-            System.out.println(numbers);
+            System.out.println(num_stack);
+            System.out.println(op_stack);
+            //System.out.println(numbers);
             char num = str.charAt(i);
             if (num == '(') {
+                op_stack.push('(');
                 continue;
             }
             else if (num == ')') {
-                numbers.add(parseString(newNum));
+                //numbers.add(parseString(newNum));
+                num_stack.push(parseString(newNum));
                 newNum = "";    //this fixed bug wow
+                //char op_top = op_stack.peek();
+                System.out.println("here!");
+                while (op_stack.peek() != '(')
+                    process();
+                //System.out.println(op_stack);
+                op_stack.pop();
+                //System.out.println(op_stack + "end");
                 continue;
             }
 
             if (num == '*') {
-                if (newNum.equals("")) 
+                if (newNum.equals("")) {
+                    op_stack.push('*');
                     continue;
-                numbers.add(parseString(newNum));
+                }
+                //numbers.add(parseString(newNum));
+                System.out.println(op_stack.peek() + "top here");
+                num_stack.push(parseString(newNum));
                 newNum = "";
+                ifStackEmpty_Push('*');
                 continue;
             }
             else if (num == '/') {
-                if (newNum.equals("")) 
+                if (newNum.equals("")) {
+                    op_stack.push('/');
                     continue;
-                numbers.add(parseString(newNum));
+                }
+                //numbers.add(parseString(newNum));
+                num_stack.push(parseString(newNum));
                 newNum = "";
+                ifStackEmpty_Push('/');
                 continue;
             }
             else if (num == '+') {
-                if (newNum.equals("")) 
+                if (newNum.equals("")) {
+                    //ifStackEmpty_Push('+');
+                    System.out.println("this thing");
+                    op_stack.push('+');
                     continue;
-                numbers.add(parseString(newNum));
+                }
+                //numbers.add(parseString(newNum));
+                num_stack.push(parseString(newNum));
                 newNum = "";
+                ifStackEmpty_Push('+');
                 continue;
             }
             else if (num == '-') {
-                if (newNum.equals("")) 
+                if (newNum.equals("")) {
+                    op_stack.push('-');
                     continue;
+                }
                 if (i != 0 && str.charAt(i-1) != 'e') {
-                    numbers.add(parseString(newNum));
+                    //numbers.add(parseString(newNum));
+                    num_stack.push(parseString(newNum));
                     newNum = "";
+                    ifStackEmpty_Push('-');
                     continue;
                 }
                 else
@@ -410,10 +523,18 @@ public class CalculatorPt2 {
                 //System.out.println("adding num");
                 newNum+=num;
                 if (i == str.length()-1)
-                    numbers.add(parseString(newNum));
+                    //numbers.add(parseString(newNum));
+                    num_stack.push(parseString(newNum));
+                    System.out.println(num_stack);
+                    System.out.println(op_stack);
                     
         }
         //numbers.add(operandParanthesis_count);  //make sure to add this back
+        while (!op_stack.isEmpty()) {
+            System.out.println(num_stack + "here");
+            System.out.println(op_stack + "there");
+            process();
+        }
         return numbers;
     }
 
