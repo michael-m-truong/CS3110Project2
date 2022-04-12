@@ -27,6 +27,11 @@ public class CalculatorPt2 {
             //-3e-2+3*(5-2)
     }
 
+    private static void solve2(LinkedList<Character> ops, LinkedList<Double> nums, int start) {
+        
+    }
+
+
     private static double solve(LinkedList<Character> ops, LinkedList<Double> nums, int start) {
         System.out.println(nums + "intial");
         System.out.println(ops);
@@ -40,13 +45,109 @@ public class CalculatorPt2 {
                 //Object[] ops_array = ops.toArray();
                 //Arrays.copyOfRange(ops_array, i+1, ops.size());
             }
+            
+            
+        }
+        for (int i = start; i < ops.size(); i++) {
             if (ops.get(i) == '*' || ops.get(i) == '/') {
-                ops.remove(i);
-                nums.add(i, solve(ops, nums, i));
+                char sign = ops.get(i);
+                if (sign == '*') {
+                    System.out.println("XXDDD"+i);
+                    if (nums.size() == 2) {
+                        return nums.remove(0) * nums.remove(0);
+                    }
+                    //System.out.println("XXDDD"+nums);
+                    else if (i == nums.size()) {
+                        nums.add(i-2, nums.remove(i-1) * nums.remove(i-2));
+                    }
+                    else
+                        nums.add(i, nums.remove(i) * nums.remove(i));
+                }
+                else if (sign == '/') {
+                    if (nums.size() == 2) {
+                        return nums.remove(0) / nums.remove(0);
+                    }
+                    /*if (i == nums.size()) {
+                        nums.add(i-2, nums.remove(i-1) / nums.remove(i-2));
+                    }
+                    if (i == nums.size()-2) {
+                        nums.add(i-2, nums.remove(i-1) / nums.remove(i-2));
+                    }
+                    else*/ 
+                        nums.add(i, nums.remove(i) / nums.remove(i));
+                }
                 //start--;
             }
         }
-
+        for (int i = start; i < ops.size(); i++) {
+            if (ops.get(i) == '+' || ops.get(i) == '-') {
+                char sign = ops.get(i);
+                if (sign == '+') {
+                    if (nums.size() == 2) {
+                        return nums.remove(0) + nums.remove(0);
+                    }
+                    /*if (i == nums.size()) {
+                        nums.add(i-2, nums.remove(i-1) + nums.remove(i-2));
+                    }
+                    else */
+                        nums.add(i, nums.remove(i) + nums.remove(i));
+                }
+                else if (sign == '-') {
+                    if (nums.size() == 2) {
+                        return nums.remove(0) - nums.remove(0);
+                    }
+                    System.out.println("sub "+i);
+                    /*if (i == nums.size()) {
+                        System.out.println("sub "+i);
+                        System.out.println(ops);
+                        System.out.println(nums);
+                        nums.add(i-2, nums.remove(i-1) - nums.remove(i-2));
+                    }
+                    else */
+                        nums.add(i, nums.remove(i) - nums.remove(i));
+                }
+                //start--;
+            }
+        }
+        return nums.removeLast();
+        /*
+        if (start == 0) {
+            for (int i = start; i < ops.size(); i++) {
+                System.out.println(nums + "calc");
+                System.out.println(ops.size());
+                char sign = ops.get(i);
+                if (nums.size() == 2) {
+                    if (sign == '*') {
+                        return nums.remove(0) * nums.remove(0);
+                    }
+                    else if (sign == '/') {
+                        return nums.remove(0) / nums.remove(0);            
+                    }
+                    else if (sign == '+') {
+                        return nums.remove(0) + nums.remove(0);                //System.out.println(nums + "add");
+                    }
+                    else if (sign == '-') {
+                        return nums.remove(0) - nums.remove(0);            
+                    }
+                }
+                if (sign == '*') {
+                    nums.add(i, nums.remove(i) * nums.remove(i));
+                }
+                else if (sign == '/') {
+                    nums.add(i, nums.remove(i) / nums.remove(i));
+                }
+                else if (sign == '+') {
+                    nums.add(i, nums.remove(i) + nums.remove(i));
+                    //System.out.println(nums + "add");
+                }
+                else if (sign == '-') {
+                    nums.add(i, nums.remove(i) - nums.remove(i));
+                }
+            }
+        }
+        return nums.removeLast();
+        */
+        /*
         //int size = ops.size();
         if (start != 0) {
         for (int i = start; i < ops.size(); i++) {
@@ -62,17 +163,17 @@ public class CalculatorPt2 {
             }
             char sign = ops.get(i);
             if (sign == '*') {
-                return nums.remove(i) * nums.remove(i);
+                nums.add(i, nums.remove(i) * nums.remove(i));
             }
             else if (sign == '/') {
-                return nums.remove(i) / nums.remove(i);
+                nums.add(i, nums.remove(i) / nums.remove(i));
             }
             else if (sign == '+') {
-                return nums.remove(i) + nums.remove(i);
+                nums.add(i, nums.remove(i) + nums.remove(i));
                 //System.out.println(nums + "add");
             }
             else if (sign == '-') {
-                return nums.remove(i) - nums.remove(i);
+                nums.add(i, nums.remove(i) - nums.remove(i));
             }
         }
         }
@@ -115,7 +216,7 @@ public class CalculatorPt2 {
         System.out.println(nums + "done recu");
         System.out.println(ops);
         return nums.getFirst();
-
+        */
 
 
     }
@@ -227,6 +328,7 @@ public class CalculatorPt2 {
             }
             else if (num == ')') {
                 numbers.add(parseString(newNum));
+                newNum = "";    //this fixed bug wow
                 continue;
             }
 
@@ -323,8 +425,18 @@ public class CalculatorPt2 {
             }
             if (num == 'e') {
                 e_count++;
+                System.out.println("here");
+                if (i + 1 == str.length()-1) {
+                    num = str.charAt(i+1);
+                    if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4' && num != '5' && num != '6' && num != '7' && num != '8' 
+                    && num != '9' && num != '.' ) {
+                        return false;
+                    }
+                    return true;
+                }
                 if (i == str.length()-1) 
                     return false;
+                    
                 if (dot_count > 1 || e_count > 1) 
                     return false;
             }
