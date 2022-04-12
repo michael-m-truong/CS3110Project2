@@ -446,7 +446,7 @@ public class CalculatorPt2 {
         //newNum+=num
         //need to do pendas
         for (int i = 0; i < str.length(); i++) {
-            System.out.println(num_stack);
+            System.out.println(num_stack + "num stack");
             System.out.println(op_stack);
             //System.out.println(numbers);
             char num = str.charAt(i);
@@ -474,7 +474,7 @@ public class CalculatorPt2 {
                     continue;
                 }
                 //numbers.add(parseString(newNum));
-                System.out.println(op_stack.peek() + "top here");
+                //System.out.println(op_stack.peek() + "top here");
                 num_stack.push(parseString(newNum));
                 newNum = "";
                 ifStackEmpty_Push('*');
@@ -519,14 +519,15 @@ public class CalculatorPt2 {
                 else
                     newNum+=num;
             }
-            else 
-                //System.out.println("adding num");
+            else {
                 newNum+=num;
+                System.out.println("adding num" + newNum);
                 if (i == str.length()-1)
                     //numbers.add(parseString(newNum));
                     num_stack.push(parseString(newNum));
-                    System.out.println(num_stack);
-                    System.out.println(op_stack);
+                   // System.out.println(num_stack);
+                   // System.out.println(op_stack);
+            }
                     
         }
         //numbers.add(operandParanthesis_count);  //make sure to add this back
