@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Stack;
@@ -17,13 +18,112 @@ public class CalculatorPt2 {
         if (inputValidation(inputStr)) {
             System.out.println(findOperands(inputStr));
             System.out.println(findNums(inputStr));
-            double paranthesis_operands = sort_PEMDAS();
-            System.out.println("Answer: " + calculate(paranthesis_operands));
+            System.out.println(solve(operands, numbers, 0));
+            //double paranthesis_operands = sort_PEMDAS();
+            //System.out.println("Answer: " + calculate(paranthesis_operands));
         }
         else 
             System.out.println("Not a valid Java floating decimal literal");
             //-3e-2+3*(5-2)
     }
+
+    private static double solve(LinkedList<Character> ops, LinkedList<Double> nums, int start) {
+        System.out.println(nums + "intial");
+        System.out.println(ops);
+        System.out.println(start);
+        for (int i = start; i < ops.size(); i++) {
+            if (ops.get(i) == '(') {
+                ops.remove(i);
+                nums.add(i, solve(ops, nums, i));
+                System.out.println(nums + " 1done recurse");
+                System.out.println(ops);
+                //Object[] ops_array = ops.toArray();
+                //Arrays.copyOfRange(ops_array, i+1, ops.size());
+            }
+            if (ops.get(i) == '*' || ops.get(i) == '/') {
+                ops.remove(i);
+                nums.add(i, solve(ops, nums, i));
+                //start--;
+            }
+        }
+
+        //int size = ops.size();
+        if (start != 0) {
+        for (int i = start; i < ops.size(); i++) {
+            System.out.println(nums + "calc");
+            System.out.println(ops.size());
+            if (nums.size() == 1) {
+                return nums.getFirst();  //cant return must add
+            }
+            if (ops.get(i) == ')') {
+                System.out.println("end par");
+                ops.remove(i);
+                return nums.get(i);
+            }
+            char sign = ops.get(i);
+            if (sign == '*') {
+                return nums.remove(i) * nums.remove(i);
+            }
+            else if (sign == '/') {
+                return nums.remove(i) / nums.remove(i);
+            }
+            else if (sign == '+') {
+                return nums.remove(i) + nums.remove(i);
+                //System.out.println(nums + "add");
+            }
+            else if (sign == '-') {
+                return nums.remove(i) - nums.remove(i);
+            }
+        }
+        }
+        for (int i = start; i < ops.size(); i++) {
+            System.out.println(nums + "calc");
+            System.out.println(ops.size());
+            char sign = ops.get(i);
+            if (nums.size() == 2) {
+                if (sign == '*') {
+                    return nums.remove(0) * nums.remove(0);
+                }
+                else if (sign == '/') {
+                    return nums.remove(0) / nums.remove(0);            
+                }
+                else if (sign == '+') {
+                    return nums.remove(0) + nums.remove(0);                //System.out.println(nums + "add");
+                }
+                else if (sign == '-') {
+                    return nums.remove(0) - nums.remove(0);            
+                }
+            }
+            if (ops.get(i) == ')') {
+                System.out.println("end par");
+                ops.remove(i);
+                return nums.get(i);
+            }
+            if (sign == '*') {
+                nums.add(nums.remove(i) * nums.remove(i));
+            }
+            else if (sign == '/') {
+                nums.add(nums.remove(i) / nums.remove(i));            
+            }
+            else if (sign == '+') {
+                nums.add(nums.remove(i) + nums.remove(i));                //System.out.println(nums + "add");
+            }
+            else if (sign == '-') {
+                nums.add(nums.remove(i) - nums.remove(i));            
+            }
+        }
+        System.out.println(nums + "done recu");
+        System.out.println(ops);
+        return nums.getFirst();
+
+
+
+    }
+
+    /*private static LinkedList splice(LinkedList list, int start, int end) {
+        LinkedList<Character> operands = new LinkedList<Character>();
+    } */
+
 
     private static double calculate(double paranthesis_operands) {
         double paranthesis_operands_copy = paranthesis_operands;
@@ -123,64 +223,14 @@ public class CalculatorPt2 {
             System.out.println(numbers);
             char num = str.charAt(i);
             if (num == '(') {
-                startParanthesis_count+=1;
                 continue;
             }
             else if (num == ')') {
-                endParanthesis_count+=1;
-                numbers.addFirst(parseString(newNum));
-                newNum = "";
-                double ele0 = numbers.get(0);
-                double ele1 = numbers.get(1);
-                numbers.set(0, ele1);
-                numbers.set(1, ele0);
+                numbers.add(parseString(newNum));
                 continue;
             }
-            if (startParanthesis_count > endParanthesis_count)
-                inParanthesis = true;
-            else 
-                inParanthesis = false;
-            if (inParanthesis) {
-                if (num == '*') {
-                    if (newNum.equals("")) 
-                        continue;
-                    numbers.addFirst(parseString(newNum));
-                    newNum = "";
-                    operandParanthesis_count++;
-                    continue;
-                }
-                else if (num == '/') {
-                    if (newNum.equals("")) 
-                        continue;
-                    numbers.addFirst(parseString(newNum));
-                    newNum = "";
-                    operandParanthesis_count++;
-                    continue;
-                }
-                else if (num == '+') {
-                    if (newNum.equals("")) 
-                        continue;
-                    numbers.addFirst(parseString(newNum));
-                    newNum = "";
-                    operandParanthesis_count++;
-                    continue;
-                }
-                else if (num == '-') {
-                    if (i != 0 && str.charAt(i-1) != 'e') {
-                        if (newNum.equals("")) 
-                            continue;
-                        numbers.addFirst(parseString(newNum));
-                        newNum = "";
-                        operandParanthesis_count++;
-                        continue;
-                    }
-                    else 
-                        newNum+=num;
-                }
-                else 
-                    newNum+=num;
-            }
-            else if (num == '*') {
+
+            if (num == '*') {
                 if (newNum.equals("")) 
                     continue;
                 numbers.add(parseString(newNum));
@@ -219,7 +269,7 @@ public class CalculatorPt2 {
                     numbers.add(parseString(newNum));
                     
         }
-        numbers.add(operandParanthesis_count);
+        //numbers.add(operandParanthesis_count);  //make sure to add this back
         return numbers;
     }
 
@@ -231,27 +281,10 @@ public class CalculatorPt2 {
         for (int i = 0; i < str.length(); i++) {
             char sign = str.charAt(i);
             if (sign == '(') 
-                startParanthesis_count+=1;
+                operands.add(sign);
             else if (sign == ')')
-                endParanthesis_count+=1;
-            if (startParanthesis_count > endParanthesis_count)
-                inParanthesis = true;
-            else 
-                inParanthesis = false;
-            if (inParanthesis) {
-                if (sign == '*')
-                    operands.addFirst(sign);
-                else if (sign == '/')
-                    operands.addFirst(sign);
-                else if (sign == '+')
-                    operands.addFirst(sign);
-                else if (sign == '-') {
-                    if (i != 0 && str.charAt(i-1) != 'e') {
-                        operands.addFirst(sign);
-                    }
-                }
-            }
-            else if (sign == '*')
+                operands.add(sign);
+            if (sign == '*')
                 operands.add(sign);
             else if (sign == '/')
                 operands.add(sign);
