@@ -18,7 +18,7 @@ public class CalculatorPt2 {
         if (inputValidation(inputStr)) {
             System.out.println(findOperands(inputStr));
             System.out.println(findNums(inputStr));
-            System.out.println(solve(operands, numbers, 0));
+            System.out.println(solve(operands, numbers, 0, operands.size()));
             //double paranthesis_operands = sort_PEMDAS();
             //System.out.println("Answer: " + calculate(paranthesis_operands));
         }
@@ -32,38 +32,58 @@ public class CalculatorPt2 {
     }
 
 
-    private static double solve(LinkedList<Character> ops, LinkedList<Double> nums, int start) {
+    private static double solve(LinkedList<Character> ops, LinkedList<Double> nums, int start, int end) {
         System.out.println(nums + "intial");
         System.out.println(ops);
         System.out.println(start);
+        int newStart=start;
         for (int i = start; i < ops.size(); i++) {
             if (ops.get(i) == '(') {
-                ops.remove(i);
-                nums.add(i, solve(ops, nums, i));
+                newStart = i;
+                //ops.remove(i);
+                //nums.add(i, solve(ops, nums, i));
                 System.out.println(nums + " 1done recurse");
                 System.out.println(ops);
                 //Object[] ops_array = ops.toArray();
                 //Arrays.copyOfRange(ops_array, i+1, ops.size());
             }
+            if (ops.get(i) == ')'){
+                //ops.remove(newStart);  //rid
+                ops.remove(i);
+                System.out.println("fk my life" + i);
+                nums.add(solve(ops, nums, newStart, i));
+                //ops.removeFirstOccurrence('(');
+                System.out.println(nums + "par thing");
+            }
             
             
         }
-        for (int i = start; i < ops.size(); i++) {
+        System.out.println("start" + start);
+        System.out.println("end" + end);
+        System.out.println(nums);
+        System.out.println(ops);
+        for (int i = start; i < end; i++) {
             if (ops.get(i) == '*' || ops.get(i) == '/') {
                 char sign = ops.get(i);
                 if (sign == '*') {
+                    //ops.remove(i);
                     System.out.println("XXDDD"+i);
                     if (nums.size() == 2) {
                         return nums.remove(0) * nums.remove(0);
                     }
                     //System.out.println("XXDDD"+nums);
-                    else if (i == nums.size()) {
+                    /*else if (i == nums.size()) {
                         nums.add(i-2, nums.remove(i-1) * nums.remove(i-2));
-                    }
-                    else
-                        nums.add(i, nums.remove(i) * nums.remove(i));
+                    } 
+                    else*/
+                        if (start == 0)
+                            nums.add(i, nums.remove(i) * nums.remove(i));
+                        else
+                            //ops.remove(i);
+                            nums.add(i-1, nums.remove(i-1) * nums.remove(i-1));
                 }
                 else if (sign == '/') {
+                    //ops.remove(i);
                     if (nums.size() == 2) {
                         return nums.remove(0) / nums.remove(0);
                     }
@@ -74,23 +94,39 @@ public class CalculatorPt2 {
                         nums.add(i-2, nums.remove(i-1) / nums.remove(i-2));
                     }
                     else*/ 
-                        nums.add(i, nums.remove(i) / nums.remove(i));
+                        if (start == 0)
+                            nums.add(i, nums.remove(i) / nums.remove(i));
+                        else
+                            nums.add(i-1, nums.remove(i-1) / nums.remove(i-1));
                 }
                 //start--;
             }
         }
-        for (int i = start; i < ops.size(); i++) {
+        for (int i = start; i < end; i++) {
             if (ops.get(i) == '+' || ops.get(i) == '-') {
                 char sign = ops.get(i);
                 if (sign == '+') {
+                    System.out.println("PLUSS");
                     if (nums.size() == 2) {
                         return nums.remove(0) + nums.remove(0);
                     }
-                    /*if (i == nums.size()) {
-                        nums.add(i-2, nums.remove(i-1) + nums.remove(i-2));
+                    System.out.println("this is i" + i);
+                    /*if (i == end-1) {
+                        System.out.println("this is i" + end);
+                        System.out.println("this is i" + nums);
+                        //double num1 = nums.remove(i-1);
+                        //double num2 = nums.remove(i-1);
+                        //nums.add(i-1, num1+num2);
+                        nums.add(i-1, nums.remove(i-1) + nums.remove(i-1));
+                        System.out.println("this is i" + nums);
+                        
                     }
                     else */
-                        nums.add(i, nums.remove(i) + nums.remove(i));
+                        //System.out.println("here");
+                        if (start == 0)
+                            nums.add(i, nums.remove(i) + nums.remove(i));
+                        else
+                            nums.add(i-1, nums.remove(i-1) + nums.remove(i-1));
                 }
                 else if (sign == '-') {
                     if (nums.size() == 2) {
@@ -104,11 +140,17 @@ public class CalculatorPt2 {
                         nums.add(i-2, nums.remove(i-1) - nums.remove(i-2));
                     }
                     else */
-                        nums.add(i, nums.remove(i) - nums.remove(i));
+                        if (start == 0)
+                            nums.add(i, nums.remove(i) - nums.remove(i));
+                        else
+                            nums.add(i-1, nums.remove(i-1) - nums.remove(i-1));
                 }
                 //start--;
             }
         }
+        System.out.println("fk");
+        System.out.println(ops);
+        System.out.println(nums);
         return nums.removeLast();
         /*
         if (start == 0) {
