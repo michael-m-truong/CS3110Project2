@@ -1,687 +1,441 @@
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Stack;
 
 public class CalculatorPt2 {
 
-    static LinkedList<Double> numbers = new LinkedList<Double>();
-    static LinkedList<Character> operands = new LinkedList<Character>();
-
+    static HashSet<Character> num_alphabet = new HashSet<Character>();
     static Stack<Double> num_stack = new Stack<Double>();
     static Stack<Character> op_stack = new Stack<Character>();
-
     public static void main(String[] args) {
+        String inputStr = " ";
         Scanner input = new Scanner(System.in);
-        System.out.print("Enter input string to convert to decimal: ");
+        num_alphabet.add('0');
+        num_alphabet.add('1');
+        num_alphabet.add('2');
+        num_alphabet.add('3');
+        num_alphabet.add('4');
+        num_alphabet.add('5');
+        num_alphabet.add('6');
+        num_alphabet.add('7');
+        num_alphabet.add('8');
+        num_alphabet.add('9');
 
-        String inputStr = input.nextLine();
-        inputStr = removeUnderscore(inputStr);
-        
-
-        if (inputValidation(inputStr)) {
-            System.out.println(findOperands(inputStr));
-            System.out.println(findNums(inputStr));
-            System.out.println(num_stack);
-            System.out.println(op_stack);
-            //System.out.println(solve(operands, numbers, 0, operands.size()));
-            //double paranthesis_operands = sort_PEMDAS();
-            //System.out.println("Answer: " + calculate(paranthesis_operands));
-        }
-        else 
-            System.out.println("Not a valid Java floating decimal literal");
-            //-3e-2+3*(5-2)
-    }
-
-    private static void solve2(LinkedList<Character> ops, LinkedList<Double> nums, int start) {
-        
-    }
-
-
-    private static double solve(LinkedList<Character> ops, LinkedList<Double> nums, int start, int end) {
-        System.out.println(nums + "intial");
-        System.out.println(ops);
-        System.out.println(start);
-        int newStart=start;
-        for (int i = start; i < ops.size(); i++) {
-            if (ops.get(i) == '(') {
-                newStart = i;
-                //ops.remove(i);
-                //nums.add(i, solve(ops, nums, i));
-                System.out.println(nums + " 1done recurse");
-                System.out.println(ops);
-                //Object[] ops_array = ops.toArray();
-                //Arrays.copyOfRange(ops_array, i+1, ops.size());
-            }
-            if (ops.get(i) == ')'){
-                //ops.remove(newStart);  //rid
-                ops.remove(i);
-                System.out.println("fk my life" + i);
-                nums.add(solve(ops, nums, newStart, i));
-                //ops.removeFirstOccurrence('(');
-                System.out.println(nums + "par thing");
-            }
-            
-            
-        }
-        System.out.println("start" + start);
-        System.out.println("end" + end);
-        System.out.println(nums);
-        System.out.println(ops);
-        for (int i = start; i < end; i++) {
-            if (ops.get(i) == '*' || ops.get(i) == '/') {
-                char sign = ops.get(i);
-                if (sign == '*') {
-                    //ops.remove(i);
-                    System.out.println("XXDDD"+i);
-                    if (nums.size() == 2) {
-                        return nums.remove(0) * nums.remove(0);
-                    }
-                    //System.out.println("XXDDD"+nums);
-                    /*else if (i == nums.size()) {
-                        nums.add(i-2, nums.remove(i-1) * nums.remove(i-2));
-                    } 
-                    else*/
-                        if (start == 0)
-                            nums.add(i, nums.remove(i) * nums.remove(i));
-                        else
-                            //ops.remove(i);
-                            nums.add(i-1, nums.remove(i-1) * nums.remove(i-1));
-                }
-                else if (sign == '/') {
-                    //ops.remove(i);
-                    if (nums.size() == 2) {
-                        return nums.remove(0) / nums.remove(0);
-                    }
-                    /*if (i == nums.size()) {
-                        nums.add(i-2, nums.remove(i-1) / nums.remove(i-2));
-                    }
-                    if (i == nums.size()-2) {
-                        nums.add(i-2, nums.remove(i-1) / nums.remove(i-2));
-                    }
-                    else*/ 
-                        if (start == 0)
-                            nums.add(i, nums.remove(i) / nums.remove(i));
-                        else
-                            nums.add(i-1, nums.remove(i-1) / nums.remove(i-1));
-                }
-                //start--;
-            }
-        }
-        for (int i = start; i < end; i++) {
-            if (ops.get(i) == '+' || ops.get(i) == '-') {
-                char sign = ops.get(i);
-                if (sign == '+') {
-                    System.out.println("PLUSS");
-                    if (nums.size() == 2) {
-                        return nums.remove(0) + nums.remove(0);
-                    }
-                    System.out.println("this is i" + i);
-                    /*if (i == end-1) {
-                        System.out.println("this is i" + end);
-                        System.out.println("this is i" + nums);
-                        //double num1 = nums.remove(i-1);
-                        //double num2 = nums.remove(i-1);
-                        //nums.add(i-1, num1+num2);
-                        nums.add(i-1, nums.remove(i-1) + nums.remove(i-1));
-                        System.out.println("this is i" + nums);
-                        
-                    }
-                    else */
-                        //System.out.println("here");
-                        if (start == 0)
-                            nums.add(i, nums.remove(i) + nums.remove(i));
-                        else
-                            nums.add(i-1, nums.remove(i-1) + nums.remove(i-1));
-                }
-                else if (sign == '-') {
-                    if (nums.size() == 2) {
-                        return nums.remove(0) - nums.remove(0);
-                    }
-                    System.out.println("sub "+i);
-                    /*if (i == nums.size()) {
-                        System.out.println("sub "+i);
-                        System.out.println(ops);
-                        System.out.println(nums);
-                        nums.add(i-2, nums.remove(i-1) - nums.remove(i-2));
-                    }
-                    else */
-                        if (start == 0)
-                            nums.add(i, nums.remove(i) - nums.remove(i));
-                        else
-                            nums.add(i-1, nums.remove(i-1) - nums.remove(i-1));
-                }
-                //start--;
-            }
-        }
-        System.out.println("fk");
-        System.out.println(ops);
-        System.out.println(nums);
-        return nums.removeLast();
-        /*
-        if (start == 0) {
-            for (int i = start; i < ops.size(); i++) {
-                System.out.println(nums + "calc");
-                System.out.println(ops.size());
-                char sign = ops.get(i);
-                if (nums.size() == 2) {
-                    if (sign == '*') {
-                        return nums.remove(0) * nums.remove(0);
-                    }
-                    else if (sign == '/') {
-                        return nums.remove(0) / nums.remove(0);            
-                    }
-                    else if (sign == '+') {
-                        return nums.remove(0) + nums.remove(0);                //System.out.println(nums + "add");
-                    }
-                    else if (sign == '-') {
-                        return nums.remove(0) - nums.remove(0);            
-                    }
-                }
-                if (sign == '*') {
-                    nums.add(i, nums.remove(i) * nums.remove(i));
-                }
-                else if (sign == '/') {
-                    nums.add(i, nums.remove(i) / nums.remove(i));
-                }
-                else if (sign == '+') {
-                    nums.add(i, nums.remove(i) + nums.remove(i));
-                    //System.out.println(nums + "add");
-                }
-                else if (sign == '-') {
-                    nums.add(i, nums.remove(i) - nums.remove(i));
-                }
-            }
-        }
-        return nums.removeLast();
-        */
-        /*
-        //int size = ops.size();
-        if (start != 0) {
-        for (int i = start; i < ops.size(); i++) {
-            System.out.println(nums + "calc");
-            System.out.println(ops.size());
-            if (nums.size() == 1) {
-                return nums.getFirst();  //cant return must add
-            }
-            if (ops.get(i) == ')') {
-                System.out.println("end par");
-                ops.remove(i);
-                return nums.get(i);
-            }
-            char sign = ops.get(i);
-            if (sign == '*') {
-                nums.add(i, nums.remove(i) * nums.remove(i));
-            }
-            else if (sign == '/') {
-                nums.add(i, nums.remove(i) / nums.remove(i));
-            }
-            else if (sign == '+') {
-                nums.add(i, nums.remove(i) + nums.remove(i));
-                //System.out.println(nums + "add");
-            }
-            else if (sign == '-') {
-                nums.add(i, nums.remove(i) - nums.remove(i));
-            }
-        }
-        }
-        for (int i = start; i < ops.size(); i++) {
-            System.out.println(nums + "calc");
-            System.out.println(ops.size());
-            char sign = ops.get(i);
-            if (nums.size() == 2) {
-                if (sign == '*') {
-                    return nums.remove(0) * nums.remove(0);
-                }
-                else if (sign == '/') {
-                    return nums.remove(0) / nums.remove(0);            
-                }
-                else if (sign == '+') {
-                    return nums.remove(0) + nums.remove(0);                //System.out.println(nums + "add");
-                }
-                else if (sign == '-') {
-                    return nums.remove(0) - nums.remove(0);            
-                }
-            }
-            if (ops.get(i) == ')') {
-                System.out.println("end par");
-                ops.remove(i);
-                return nums.get(i);
-            }
-            if (sign == '*') {
-                nums.add(nums.remove(i) * nums.remove(i));
-            }
-            else if (sign == '/') {
-                nums.add(nums.remove(i) / nums.remove(i));            
-            }
-            else if (sign == '+') {
-                nums.add(nums.remove(i) + nums.remove(i));                //System.out.println(nums + "add");
-            }
-            else if (sign == '-') {
-                nums.add(nums.remove(i) - nums.remove(i));            
-            }
-        }
-        System.out.println(nums + "done recu");
-        System.out.println(ops);
-        return nums.getFirst();
-        */
-
-
-    }
-
-    /*private static LinkedList splice(LinkedList list, int start, int end) {
-        LinkedList<Character> operands = new LinkedList<Character>();
-    } */
-
-
-    private static double calculate(double paranthesis_operands) {
-        double paranthesis_operands_copy = paranthesis_operands;
-        while (paranthesis_operands != 0) {
-            char sign = operands.removeFirst();
-            if (sign == '*') {
-                numbers.addLast(numbers.removeFirst() * numbers.removeFirst());
-                paranthesis_operands--;
-            }
-            else if (sign == '/') {
-                numbers.addLast(numbers.removeFirst() / numbers.removeFirst());
-                paranthesis_operands--;
-            }
-            else if (sign == '+') {
-                numbers.addLast(numbers.removeFirst() + numbers.removeFirst());
-                paranthesis_operands--;
-            }
-            else if (sign == '-') {
-                numbers.addLast(numbers.removeFirst() - numbers.removeFirst());
-                paranthesis_operands--;
-            }
-        }
-        while (paranthesis_operands_copy != 0) {
-            numbers.addFirst(numbers.removeLast());
-            paranthesis_operands_copy--;
-        }
-
-        while (operands.size() != 0) {
-            System.out.println(numbers);
-            System.out.println("------------");
-            System.out.println(operands);
-            char sign = operands.removeFirst();
-            if (sign == '*') {
-                numbers.addFirst(numbers.removeFirst() * numbers.removeFirst());
-            }
-            else if (sign == '/') {
-                numbers.addFirst(numbers.removeFirst() / numbers.removeFirst());
-            }
-            else if (sign == '+') {
-                numbers.addFirst(numbers.removeFirst() + numbers.removeFirst());
-            }
-            else if (sign == '-') {
-                numbers.addFirst(numbers.removeFirst() - numbers.removeFirst());
-            }
-        }
-        return numbers.removeFirst();
-    }
-
-    private static double sort_PEMDAS() {
-        double paranthesis_operands = numbers.removeLast();
-        //int swaps = 0;
-        int sizeDiff = numbers.size() - operands.size();
-        for (int i = (int) paranthesis_operands; i < operands.size(); i++) {
-            if (operands.get(i) == '*' || operands.get(i) == '/') {
-                int index0 = i;
-                int indexPrevious = i-1;
-                while (index0 != paranthesis_operands && operands.get(i-1) != '*' && operands.get(i-1) != '/') {
-                    System.out.println(operands);
-                    //swaps+=1;
-                    swapOrder_operands(indexPrevious, index0);
-                    swapOrder_nums(indexPrevious+sizeDiff, index0+sizeDiff);
-                    index0--;
-                    indexPrevious = index0 - 1;
-                }
-            }
-        }
-        System.out.println(operands);
-        System.out.println(numbers);
-        return paranthesis_operands;
-
-    }
-
-    private static void swapOrder_nums(int index0, int index1) {
-        double ele0 = numbers.get(index0);
-        double ele1 = numbers.get(index1);
-        numbers.set(index0, ele1);
-        numbers.set(index1, ele0);
-    }
-
-    private static void swapOrder_operands(int index0, int index1) {
-        char ele0 = operands.get(index0);
-        char ele1 = operands.get(index1);
-        operands.set(index0, ele1);
-        operands.set(index1, ele0);
-    }
-
-    private static void ifStackEmpty_Push(Character op) {
-        
-
-            System.out.println(num_stack + "not em");
-            System.out.println(op_stack);
-            while (!op_stack.isEmpty() && precedence(op) <= precedence(op_stack.peek())) {
-                System.out.println("processing");
-                process();
-            }
-            //if (precedence(op) >= precedence(op_stack.peek())) {
-                //process();
-                op_stack.push(op);
-            //} 
-            
-
-        /* 
-        if (op_stack.empty())
-            op_stack.push(op);
-        else {
-            System.out.println(num_stack + "not em");
-            System.out.println(op_stack);
-            while (precedence(op) < precedence(op_stack.peek())) {
-                System.out.println("processing");
-                process();
-            }
-            if (precedence(op) >= precedence(op_stack.peek())) {
-                //process();
-                op_stack.push(op);
-            }
-            
-        }
-        */
-    }
-
-    private static void process() {
-        System.out.println(num_stack + "proc");
-        System.out.println(op_stack);
-        System.out.println(op_stack.peek() + "top");
-        double b = num_stack.pop();
-        double a = num_stack.pop();
-        //double b = num_stack.pop();
-        char operation = op_stack.pop();
-        switch (operation) {
-            case '+':
-                num_stack.push(a+b);
+        while (inputStr != "q") {
+            System.out.print("Enter input string to convert to decimal (press q to quit): ");
+            inputStr = input.nextLine();
+            if (inputStr.equals("q")) {
                 break;
-            case '-':
-                num_stack.push(a-b);
-                break;
-            case '*':
-                num_stack.push(a*b);
-                break;
-            case '/':
-                if (a == 0)
-                    throw new
-                            UnsupportedOperationException("Cannot divide by zero");
-                num_stack.push(a/b);
+            }
+
+            if (startState(inputStr)) {    
+                //findSubStr(inputStr);
+                System.out.println(num_stack);
+                num_stack.clear();
+                op_stack.clear();
+            }
+            else  
+                System.out.println("Not a valid Java floating decimal literal");
+                num_stack.clear();
+                op_stack.clear();
         }
+        input.close();
     }
 
-
-
-    private static int precedence(char op) {
-        switch (op){
-            case '+':
-            case '-':
-                return 1;
-            case '*':
-            case '/':
-                return 2;
-            case '^':
-                return 3;
+    private static boolean startState(String str) {
+        if (str.isEmpty())
+            return false;
+        char num = str.charAt(0);
+        if (num_alphabet.contains(num) || num == '.' || num == '(') {
+            //System.out.println("huh");
+            return findSubStr(str);
         }
-        return -1;
-
+        return false;
     }
-    
-    private static LinkedList findNums(String str) {
-        //LinkedList<Double> numbers = new LinkedList<Double>();
-        boolean inParanthesis = false;
+
+    private static boolean findSubStr(String str) {
         String newNum = "";
-        int startParanthesis_count = 0;
-        int endParanthesis_count = 0;
-        double operandParanthesis_count = 0;
-        //newNum+=num
-        //need to do pendas
-        for (int i = 0; i < str.length(); i++) {
-            System.out.println(num_stack + "num stack");
-            System.out.println(op_stack);
-            //System.out.println(numbers);
+        String subStr = "";
+        String op = "";
+        for (int i = 0; i < str.length(); i++) { 
             char num = str.charAt(i);
+            System.out.println(newNum);
+            subStr = underscoreValidation(newNum);
             if (num == '(') {
-                op_stack.push('(');
+                op_stack.push(num);
                 continue;
             }
-            else if (num == ')') {
-                //numbers.add(parseString(newNum));
-                num_stack.push(parseString(newNum));
-                newNum = "";    //this fixed bug wow
-                //char op_top = op_stack.peek();
-                System.out.println("here!");
+            /*else if (num == ')' && str.charAt(i-1) == ')') {
                 while (op_stack.peek() != '(')
                     process();
                 //System.out.println(op_stack);
                 op_stack.pop();
                 //System.out.println(op_stack + "end");
-                continue;
-            }
-
-            if (num == '*') {
-                if (newNum.equals("")) {
-                    op_stack.push('*');
-                    continue;
+                //continue;
+            } */
+            else if ((num == '+' || num == '-') && i != 0) {
+                if (str.charAt(i-1) != 'E' && str.charAt(i-1) != 'e') {
+                    subStr = underscoreValidation(newNum);
+                    if (inputValidation(subStr)) {
+                        System.out.println("no e");
+                        num_stack.push(parseString(subStr));
+                        //newNum+=num;
+                        op+=num;
+                        System.out.println(newNum + "b4 sub");
+                        findNums(op);
+                        if (num != ')')
+                        newNum = "";
+                        continue;
+                    }
+                    else 
+                        return false;
                 }
-                //numbers.add(parseString(newNum));
-                //System.out.println(op_stack.peek() + "top here");
-                num_stack.push(parseString(newNum));
-                newNum = "";
-                ifStackEmpty_Push('*');
-                continue;
-            }
-            else if (num == '/') {
-                if (newNum.equals("")) {
-                    op_stack.push('/');
-                    continue;
-                }
-                //numbers.add(parseString(newNum));
-                num_stack.push(parseString(newNum));
-                newNum = "";
-                ifStackEmpty_Push('/');
-                continue;
-            }
-            else if (num == '+') {
-                if (newNum.equals("")) {
-                    //ifStackEmpty_Push('+');
-                    System.out.println("this thing");
-                    op_stack.push('+');
-                    continue;
-                }
-                //numbers.add(parseString(newNum));
-                num_stack.push(parseString(newNum));
-                newNum = "";
-                ifStackEmpty_Push('+');
-                continue;
-            }
-            else if (num == '-') {
-                if (newNum.equals("")) {
-                    op_stack.push('-');
-                    continue;
-                }
-                if (i != 0 && str.charAt(i-1) != 'e') {
-                    //numbers.add(parseString(newNum));
-                    num_stack.push(parseString(newNum));
-                    newNum = "";
-                    ifStackEmpty_Push('-');
-                    continue;
-                }
-                else
-                    newNum+=num;
-            }
-            else {
                 newNum+=num;
-                System.out.println("adding num" + newNum);
-                if (i == str.length()-1)
-                    //numbers.add(parseString(newNum));
-                    num_stack.push(parseString(newNum));
-                   // System.out.println(num_stack);
-                   // System.out.println(op_stack);
+                continue;
             }
-                    
+            else if (!num_alphabet.contains(num) && num != 'E' && num != 'e' && num !='d' &&
+            num != 'D' && num != 'f' && num != 'F' && num != '.') {
+                    subStr = underscoreValidation(newNum);
+                    if (inputValidation(subStr)) {
+                        //if (num == ')' && num_alphabet.contains(str.charAt(i-1)))
+                        num_stack.push(parseString(subStr));
+                        //newNum+=num;
+                        op+=num;
+                        findNums(op);
+                        if (num != ')')
+                        newNum = "";
+                    }
+                    else 
+                        return false;
+
+            }
+            else
+                newNum+=num;
         }
-        //numbers.add(operandParanthesis_count);  //make sure to add this back
-        while (!op_stack.isEmpty()) {
-            System.out.println(num_stack + "here");
-            System.out.println(op_stack + "there");
+        System.out.println("end!");
+        System.out.println(newNum);
+        System.out.println(num_stack);
+        //System.out.println(subStr);
+        if (inputValidation(newNum)) {
+            System.out.println(newNum + "nuew");
+            //if ()
+            subStr = underscoreValidation(newNum);
+            if (num_stack.size() <= 1)
+            num_stack.add(parseString(subStr));
+            System.out.println(op_stack);
+            //findNums(newNum);
+            while (!op_stack.isEmpty()) {
+                System.out.println(num_stack + "here");
+                System.out.println(op_stack + "there");
+                process();
+            }
+            while (num_stack.size() > 1) {
+                System.out.println(num_stack);
+                num_stack.pop();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private static void ifStackEmpty_Push(Character op) {
+        
+        System.out.println(num_stack + "not em");
+        System.out.println(op_stack);
+        while (!op_stack.isEmpty() && precedence(op) <= precedence(op_stack.peek())) {
+            System.out.println("processing");
             process();
         }
-        return numbers;
+        //if (precedence(op) >= precedence(op_stack.peek())) {
+            //process();
+            op_stack.push(op);
+        //} 
+    }
+    
+    private static void process() {
+    System.out.println(num_stack + "proc");
+    System.out.println(op_stack);
+    System.out.println(op_stack.peek() + "top");
+    double b = num_stack.pop();
+    double a = num_stack.pop();
+    //double b = num_stack.pop();
+    char operation = op_stack.pop();
+    switch (operation) {
+        case '+':
+            num_stack.push(a+b);
+            break;
+        case '-':
+            num_stack.push(a-b);
+            break;
+        case '*':
+            num_stack.push(a*b);
+            break;
+        case '/':
+            if (a == 0)
+                throw new
+                        UnsupportedOperationException("Cannot divide by zero");
+            num_stack.push(a/b);
+    }
+    }
+    
+    private static int precedence(char op) {
+    switch (op){
+        case '+':
+        case '-':
+            return 1;
+        case '*':
+        case '/':
+            return 2;
+        case '^':
+            return 3;
+    }
+    return -1;
+    }
+    
+    private static boolean findNums(String str) {
+    //LinkedList<Double> numbers = new LinkedList<Double>();
+    boolean inParanthesis = false;
+    String newNum = "";
+    int startParanthesis_count = 0;
+    int endParanthesis_count = 0;
+    double operandParanthesis_count = 0;
+    //newNum+=num
+    //need to do pendas
+    System.out.println("here");
+        char num = str.charAt(str.length()-1);
+        System.out.println(num + "huh");
+        if (num == '(') {
+            op_stack.push('(');
+            //continue;
+        }
+        else if (num == ')') {
+            while (op_stack.peek() != '(')
+                process();
+            //System.out.println(op_stack);
+            op_stack.pop();
+            //System.out.println(op_stack + "end");
+            //continue;
+        }
+    
+        else if (num == '*') {
+            ifStackEmpty_Push('*');
+            //continue;
+        }
+        else if (num == '/') {
+            ifStackEmpty_Push('/');
+            //continue;
+        }
+        else if (num == '+') {
+            //numbers.add(parseString(newNum));
+            //num_stack.push(parseString(newNum));
+            //newNum = "";
+            ifStackEmpty_Push('+');
+            //continue;
+        }
+        else if (num == '-') {
+            if (newNum.equals("")) {
+                op_stack.push('-');
+                //continue;
+            }
+            //if (i != 0 && str.charAt(i-1) != 'e') {
+                //numbers.add(parseString(newNum));
+                //num_stack.push(parseString(newNum));
+                //newNum = "";
+                ifStackEmpty_Push('-');
+                //continue;
+            //}
+            //else
+                //newNum+=num;
+        }
+        else {
+            //newNum+=num;
+            System.out.println("adding num" + num);
+            //if (i == str.length()-1)
+                //numbers.add(parseString(newNum));
+                //num_stack.push(parseString(newNum));
+                //System.out.println(num_stack);
+               // System.out.println(op_stack);
+                
+    }
+    //numbers.add(operandParanthesis_count);  //make sure to add this back
+    /*while (!op_stack.isEmpty()) {
+        System.out.println(num_stack + "here");
+        System.out.println(op_stack + "there");
+        process();
+    }*/  //add this back later
+    return true;
     }
 
-    private static LinkedList findOperands(String str) {
-        //LinkedList<Character> operands = new LinkedList<Character>();
-        boolean inParanthesis = false;
-        int startParanthesis_count = 0;
-        int endParanthesis_count = 0;
-        for (int i = 0; i < str.length(); i++) {
-            char sign = str.charAt(i);
-            if (sign == '(') 
-                operands.add(sign);
-            else if (sign == ')')
-                operands.add(sign);
-            if (sign == '*')
-                operands.add(sign);
-            else if (sign == '/')
-                operands.add(sign);
-            else if (sign == '+')
-                operands.add(sign);
-            else if (sign == '-') {
-                if (i != 0 && str.charAt(i-1) != 'e') {
-                    operands.add(sign);
-                }
-            }
-        }
-        return operands;
-    }  
 
-    private static String removeUnderscore(String str) {
-        String newStr = "";
-        for (int i = 0; i < str.length(); i++) {
-            char num = str.charAt(i);
-            if (num != '_')
-                newStr+=num;
-        }
-        return newStr;
-    }
-
-    private static boolean inputValidation(String str) {
-        int e_count = 0;
-        int dot_count = 0;
-        for (int i = 0; i < str.length(); i++) {
-            char num = str.charAt(i);
-            if (i != str.length()-1) {
-                char numNext = str.charAt(i+1);
-                if ((num  == '-' && numNext == '-') || (num  == '+' && numNext == '+') || (num  == '.' && numNext == '.')
-                || (num  == '/' && numNext == '/') || (num  == '*' && numNext == '*')) {
-                    return false;
-                }
-            }
-            if (num == 'e') {
-                e_count++;
-                System.out.println("here");
-                if (i + 1 == str.length()-1) {
-                    num = str.charAt(i+1);
-                    if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4' && num != '5' && num != '6' && num != '7' && num != '8' 
-                    && num != '9' && num != '.' ) {
-                        return false;
-                    }
-                    return true;
-                }
-                if (i == str.length()-1) 
-                    return false;
-                    
-                if (dot_count > 1 || e_count > 1) 
-                    return false;
-            }
-            else if (num == '.') {
-                dot_count++;
-                if (dot_count > 1 || e_count > 1) 
-                    return false;
-            }
-            /*else if (i == str.length()-1) {
-                if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4' && num != '5' && num != '6' && num != '7' 
-                && num != '8' && num != '9' && num != '.' && num != '+' && num != '-') {
-                    if (num == 'f' || num == 'F' || num == 'd' || num == 'D') {
-                        return true;
-                    }
-                    else
-                        return false;
-                }
-            } */
-            else if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4' && num != '5' && num != '6' && num != '7' && num != '8' 
-                && num != '9' && num != '.' && num != '+' && num != '-' && num != '*' && num != '/' && num != ')' && num != '(') 
+    private static boolean underscoreValidation_(int i, String str) {   //helper function
+        if (str.charAt(i) == '_') {
+            return underscoreValidation_(i+1, str);
+        } 
+        else if (str.charAt(i) != '0' && str.charAt(i) != '1' && str.charAt(i) != '2' && str.charAt(i) != '3' && 
+            str.charAt(i) != '4' && str.charAt(i) != '5' && str.charAt(i) != '6' && str.charAt(i) != '7' &&
+            str.charAt(i) != '8' && str.charAt(i) != '9') {
                 return false;
         }
         return true;
     }
 
-    private static double parseString(String str) {
+    private static String underscoreValidation(String str) {   //STATE1
+        String newStr = "";
+        for (int i = 0; i < str.length(); i++) {
+            char num = str.charAt(i);
+            if (num != '_')         
+                newStr+=num;
+            if (num == '_') {       
+                if (i == 0) {
+                    newStr+=num;
+                }
+                else if (i == str.length()-1) {
+                    newStr+=num;
+                }
+                else if (i != str.length()-1) {   //if '_' is not b/w 2 digits, reject
+                        if (str.charAt(i-1) != '0' && str.charAt(i-1) != '1' && str.charAt(i-1) != '2' && str.charAt(i-1) != '3' && 
+                            str.charAt(i-1) != '4' && str.charAt(i-1) != '5' && str.charAt(i-1) != '6' && str.charAt(i-1) != '7' &&
+                            str.charAt(i-1) != '8' && str.charAt(i-1) != '9') {
+                            if (str.charAt(i-1) == '_') {
+                                continue;
+                            }
+                            else
+                                newStr+=num;
+                            
+                        }
+                        else if (!underscoreValidation_(i+1, str)) {
+                            newStr+=num;
+                        }
+
+                    
+                }
+
+            }
+        }
+        return newStr;
+    }
+
+    private static boolean inputValidation(String str) {     //STATE2; if return false -> bad state
+                                                            //if return true -> go to STATE3
+        int e_count = 0;
+        int dot_count = 0;
+        if (str.length() == 0) {  //reject empty string
+            return false;
+        }
+        for (int i = 0; i < str.length(); i++) {
+            char num = str.charAt(i);
+            if (i == 0 && num == '.' && i == str.length()-1) {    //reject if str = '.'
+                return false;
+            }
+            if (i == 0 && (num == 'E' || num == 'e'))  //reject if first char of string is e,E
+                return false;
+            if ((i == 0 && num == '-') || ( i==0 && num == '+') || ( i==0 && num == 'd')
+            || ( i==0 && num == 'D') || ( i==0 && num == 'f') || ( i==0 && num == 'F')) { //reject if first char of string is the following chars
+                return false;
+            }
+            if ((num == '+' || num == '-')) {            //reject if there is no 'e,E' before '+,-'
+                if (i == str.length()-1) {
+                    return false;
+                }
+                if (i != 0) {
+                    if (str.charAt(i-1) != 'e' && str.charAt(i-1) != 'E') {
+                        return false;
+                    }
+                }
+            }
+
+            if (i != str.length()-1) {                 
+                char numNext = str.charAt(i+1);      //reject if operators are consecutive (for proj2)
+                if ((num  == '-' && numNext == '-') || (num  == '+' && numNext == '+') || (num  == '.' && numNext == '.')
+                || (num  == '/' && numNext == '/') || (num  == '*' && numNext == '*')) {
+                    return false;
+                }
+            }
+            if (num == 'e' || num == 'E') {          
+                e_count++;
+                if (i == str.length()-1)           //reject if last char of str is 'E,e'
+                    return false;
+                if (dot_count > 1 || e_count > 1)   //reject if more than 1 'e,E' or '.' in num
+                    return false;
+            }
+            else if (num == '.') {
+                if (e_count > dot_count)            //reject if num is an integer; only accepts floats
+                    return false;
+                dot_count++;
+                if (dot_count > 1 || e_count > 1)     //reject if more than 1 'e,E' or '.' in num
+                    return false;
+            }
+            else if (i == str.length()-1) {         
+                if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4' && num != '5' && num != '6' && num != '7' 
+                && num != '8' && num != '9' && num != '.' && num != '+' && num != '-') {
+                    if (num == 'f' || num == 'F' || num == 'd' || num == 'D') {  //accept suffixes
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+            }                                         
+            //reject other alphabet
+            else if (num != '0' && num != '1' && num != '2' && num != '3' && num != '4' && num != '5' && num != '6' && num != '7' && num != '8' 
+                && num != '9' && num != '.' && num != '+' && num != '-') 
+                return false;
+            if (i == str.length()-1) {
+                if (dot_count == 0 && e_count == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static double parseString(String str) {    //STATE3 -> accept state
         double result = 0;
-        boolean negativeNumber = false;
         boolean lessThanOne = false;
         boolean powerOn = false;
         double powerOf10 = 0;
         boolean powerof10_negative = false;
         int decimalPlace = 0;
-        int powerPlace = 0;
-        int placesOnRight = 0;
+        int placesOnLeft = 0;
         int powerCount = 0;
         for (int i = 0; i < str.length(); i++) {
             char num = str.charAt(i);
-            if (num == '.' || num == 'e' || num == 'E' || num == '-') 
+            if (num == '.' || num == 'e' || num == 'E') 
+                break;
+            else if (num == 'f' || num == 'F' || num == 'd' || num == 'D') 
                 break;
             else
-                placesOnRight++;
+                placesOnLeft++;
         }
+    
+        boolean reached_E = false;
         for (int i = 0; i < str.length(); i++) {
             char num = str.charAt(i);
-            if (num == 'e' || num == 'E') {
-                powerCount++;
-                if (str.charAt(i+1) == '-')
+            if (num == 'E' || num == 'e') {
+                reached_E = true;
+            }
+            else if (reached_E) {
+                if (num == '-' || num == '+' || num == 'f' || num == 'F' || num == 'd' || num == 'D') {
+                    continue;
+                }
+                else 
                     powerCount++;
-                break;
             }
-            else if (num == '.' || num == '-') {
-                powerCount++;
-                continue;
-            }
-            else
-                powerCount++;
         }
-        //System.out.println(powerCount);
-        powerCount = str.length() - powerCount;
-        powerCount-=1;
-        placesOnRight--;
-        //System.out.println(powerCount);
+        powerCount--;
+        placesOnLeft--;
 
         for (int i = 0; i < str.length(); i++) {
             if (lessThanOne)
                 decimalPlace++;
-            if (powerOn)
-                powerPlace++;
 
             char num = str.charAt(i);
-            if (num == '-' && i == 0)
-                negativeNumber = true;
-            else if (num == 'E' || num == 'e') {
+            if (num == 'E' || num == 'e') {
                 powerOn = true;
                 if (str.charAt(i+1) == '-') 
                     powerof10_negative = true;
             }
             else if (num == '.') {
                 lessThanOne = true;
-                //result = reverseNum(result);
             }
 
             /*Multiply by 10^n for e side of decimal */
@@ -732,53 +486,35 @@ public class CalculatorPt2 {
 
 
             else if (num == '0')
-                result += Math.pow(10, placesOnRight--)*0;
+                result += Math.pow(10, placesOnLeft--)*0;
             else if (num == '1')
-                result += Math.pow(10, placesOnRight--)*1;
+                result += Math.pow(10, placesOnLeft--)*1;
             else if (num == '2')
-                result += Math.pow(10, placesOnRight--)*2;
+                result += Math.pow(10, placesOnLeft--)*2;
             else if (num == '3')
-                result += Math.pow(10, placesOnRight--)*3;
+                result += Math.pow(10, placesOnLeft--)*3;
             else if (num == '4')
-                result += Math.pow(10, placesOnRight--)*4;
+                result += Math.pow(10, placesOnLeft--)*4;
             else if (num == '5')
-                result += Math.pow(10, placesOnRight--)*5;
+                result += Math.pow(10, placesOnLeft--)*5;
             else if (num == '6')
-                result += Math.pow(10, placesOnRight--)*6;
+                result += Math.pow(10, placesOnLeft--)*6;
             else if (num == '7')
-                result += Math.pow(10, placesOnRight--)*7;
+                result += Math.pow(10, placesOnLeft--)*7;
             else if (num == '8')
-                result += Math.pow(10, placesOnRight--)*8;
+                result += Math.pow(10, placesOnLeft--)*8;
             else if (num == '9')
-                result += Math.pow(10, placesOnRight--)*9;
+                result += Math.pow(10, placesOnLeft--)*9;
             
         }
-        //if (!lessThanOne) {
-        //    result = reverseNum(result);
-        //}
-
-        //powerOf10 = reverseNum(powerOf10);
+    
         if (powerof10_negative) 
             result = result * Math.pow(10, -powerOf10);
         else
             result = result * Math.pow(10, powerOf10);
-
-        if (negativeNumber) {
-            result= -1*result;
-        }
         
         return result; 
     }
 
-    private static double reverseNum(double num) {
-        double reversedNumber = 0;
-        while (num >= 1) {
-            reversedNumber = Math.floor(reversedNumber * 10 + num % 10);
-            num = num / 10;
-        }
-        return reversedNumber;
-    }
-
-
-
 } 
+
