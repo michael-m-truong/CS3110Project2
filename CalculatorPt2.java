@@ -65,6 +65,18 @@ public class CalculatorPt2 {
                 op_stack.push(num);
                 continue;
             }
+            if (num == ')') {
+                subStr = underscoreValidation(newNum);
+                System.out.println(newNum + "berrrr");
+                if (!newNum.isEmpty())
+                num_stack.push(parseString(subStr));
+                op+=num;
+                findNums(op);
+                newNum = "";
+                
+            //System.out.println(op_stack + "end");
+            //continue;
+            }  
             /*else if (num == ')' && str.charAt(i-1) == ')') {
                 while (op_stack.peek() != '(')
                     process();
@@ -76,8 +88,9 @@ public class CalculatorPt2 {
             else if ((num == '+' || num == '-') && i != 0) {
                 if (str.charAt(i-1) != 'E' && str.charAt(i-1) != 'e') {
                     subStr = underscoreValidation(newNum);
-                    if (inputValidation(subStr)) {
+                    if (inputValidation(subStr) || newNum.isEmpty()) {
                         System.out.println("no e");
+                        if (!newNum.isEmpty())
                         num_stack.push(parseString(subStr));
                         //newNum+=num;
                         op+=num;
@@ -96,8 +109,11 @@ public class CalculatorPt2 {
             else if (!num_alphabet.contains(num) && num != 'E' && num != 'e' && num !='d' &&
             num != 'D' && num != 'f' && num != 'F' && num != '.') {
                     subStr = underscoreValidation(newNum);
-                    if (inputValidation(subStr)) {
-                        //if (num == ')' && num_alphabet.contains(str.charAt(i-1)))
+                    if (inputValidation(subStr) || newNum.isEmpty()) {
+                        //if (i+1 != str.length() && num == ')' && !num_alphabet.contains(str.charAt(i+1)))
+                        //num_stack.push(parseString(subStr));
+                        //if (num != ')')
+                        if (!newNum.isEmpty())
                         num_stack.push(parseString(subStr));
                         //newNum+=num;
                         op+=num;
@@ -116,12 +132,14 @@ public class CalculatorPt2 {
         System.out.println(newNum);
         System.out.println(num_stack);
         //System.out.println(subStr);
-        if (inputValidation(newNum)) {
+        if (inputValidation(newNum) || newNum.isEmpty()) {
             System.out.println(newNum + "nuew");
             //if ()
             subStr = underscoreValidation(newNum);
-            if (num_stack.size() <= 1)
+            //if (num_stack.size() <= 1)
+            if (!newNum.isEmpty())
             num_stack.add(parseString(subStr));
+            System.out.println(num_stack);
             System.out.println(op_stack);
             //findNums(newNum);
             while (!op_stack.isEmpty()) {
@@ -160,6 +178,7 @@ public class CalculatorPt2 {
     double a = num_stack.pop();
     //double b = num_stack.pop();
     char operation = op_stack.pop();
+    System.out.println(op_stack);
     switch (operation) {
         case '+':
             num_stack.push(a+b);
