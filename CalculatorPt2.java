@@ -252,10 +252,10 @@ public class CalculatorPt2 {
             //continue;
         }
         else if (num == '-') {
-            if (newNum.equals("")) {
-                op_stack.push('-');
+            //if (newNum.equals("")) {
+              //  op_stack.push('-');
                 //continue;
-            }
+            //}
             //if (i != 0 && str.charAt(i-1) != 'e') {
                 //numbers.add(parseString(newNum));
                 //num_stack.push(parseString(newNum));
