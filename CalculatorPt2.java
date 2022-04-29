@@ -30,7 +30,7 @@ public class CalculatorPt2 {
 
             if (startState(inputStr)) {    
                 //findSubStr(inputStr);
-                System.out.println(num_stack);
+                System.out.println(num_stack.pop());
                 num_stack.clear();
                 op_stack.clear();
             }
@@ -60,7 +60,7 @@ public class CalculatorPt2 {
         for(int i = 0; i < s.length(); i++) {
             char a = s.charAt(i);
             if(a == '(' || a == '[' || a == '{') stack.push(a);
-            else if(stack.empty()) return false;
+            //else if(stack.empty()) return false;
             else if(a == ')' && stack.pop() != '(') return false;
             else if(a == ']' && stack.pop() != '[') return false;
             else if(a == '}' && stack.pop() != '{') return false;
@@ -74,7 +74,7 @@ public class CalculatorPt2 {
         String op = "";
         for (int i = 0; i < str.length(); i++) { 
             char num = str.charAt(i);
-            System.out.println(newNum);
+            //System.out.println(newNum);
             subStr = underscoreValidation(newNum);
             if (num == '(') {
                 op_stack.push(num);
@@ -82,7 +82,7 @@ public class CalculatorPt2 {
             }
             if (num == ')') {
                 subStr = underscoreValidation(newNum);
-                System.out.println(newNum + "berrrr");
+                //System.out.println(newNum + "berrrr");
                 if (!newNum.isEmpty())
                 num_stack.push(parseString(subStr));
                 op+=num;
@@ -104,12 +104,12 @@ public class CalculatorPt2 {
                 if (str.charAt(i-1) != 'E' && str.charAt(i-1) != 'e') {
                     subStr = underscoreValidation(newNum);
                     if (inputValidation(subStr) || newNum.isEmpty()) {
-                        System.out.println("no e");
+                        //System.out.println("no e");
                         if (!newNum.isEmpty())
                         num_stack.push(parseString(subStr));
                         //newNum+=num;
                         op+=num;
-                        System.out.println(newNum + "b4 sub");
+                        //System.out.println(newNum + "b4 sub");
                         findNums(op);
                         if (num != ')')
                         newNum = "";
@@ -143,27 +143,27 @@ public class CalculatorPt2 {
             else
                 newNum+=num;
         }
-        System.out.println("end!");
-        System.out.println(newNum);
-        System.out.println(num_stack);
+        //System.out.println("end!");
+        //System.out.println(newNum);
+        //System.out.println(num_stack);
         //System.out.println(subStr);
         if (inputValidation(newNum) || newNum.isEmpty()) {
-            System.out.println(newNum + "nuew");
+            //System.out.println(newNum + "nuew");
             //if ()
             subStr = underscoreValidation(newNum);
             //if (num_stack.size() <= 1)
             if (!newNum.isEmpty())
             num_stack.add(parseString(subStr));
-            System.out.println(num_stack);
-            System.out.println(op_stack);
+            //System.out.println(num_stack);
+            //System.out.println(op_stack);
             //findNums(newNum);
             while (!op_stack.isEmpty()) {
-                System.out.println(num_stack + "here");
-                System.out.println(op_stack + "there");
+                //System.out.println(num_stack + "here");
+                //System.out.println(op_stack + "there");
                 process();
             }
             while (num_stack.size() > 1) {
-                System.out.println(num_stack);
+                //System.out.println(num_stack);
                 num_stack.pop();
             }
             return true;
@@ -173,10 +173,10 @@ public class CalculatorPt2 {
 
     private static void ifStackEmpty_Push(Character op) {
         
-        System.out.println(num_stack + "not em");
-        System.out.println(op_stack);
+        //System.out.println(num_stack + "not em");
+        //System.out.println(op_stack);
         while (!op_stack.isEmpty() && precedence(op) <= precedence(op_stack.peek())) {
-            System.out.println("processing");
+            //System.out.println("processing");
             process();
         }
         //if (precedence(op) >= precedence(op_stack.peek())) {
@@ -186,14 +186,14 @@ public class CalculatorPt2 {
     }
     
     private static void process() {
-    System.out.println(num_stack + "proc");
-    System.out.println(op_stack);
-    System.out.println(op_stack.peek() + "top");
+    //System.out.println(num_stack + "proc");
+    //System.out.println(op_stack);
+    //System.out.println(op_stack.peek() + "top");
     double b = num_stack.pop();
     double a = num_stack.pop();
     //double b = num_stack.pop();
     char operation = op_stack.pop();
-    System.out.println(op_stack);
+    //System.out.println(op_stack);
     switch (operation) {
         case '+':
             num_stack.push(a+b);
@@ -235,9 +235,9 @@ public class CalculatorPt2 {
     double operandParanthesis_count = 0;
     //newNum+=num
     //need to do pendas
-    System.out.println("here");
+    //System.out.println("here");
         char num = str.charAt(str.length()-1);
-        System.out.println(num + "huh");
+        //System.out.println(num + "huh");
         if (num == '(') {
             op_stack.push('(');
             //continue;
@@ -283,7 +283,7 @@ public class CalculatorPt2 {
         }
         else {
             //newNum+=num;
-            System.out.println("adding num" + num);
+            //System.out.println("adding num" + num);
             //if (i == str.length()-1)
                 //numbers.add(parseString(newNum));
                 //num_stack.push(parseString(newNum));
